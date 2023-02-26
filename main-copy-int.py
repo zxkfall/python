@@ -12,67 +12,77 @@ def generate_excel(file_path):
     try:
         data = pd.read_excel(file_path)
         current_sheet = data.values.tolist()
-        end_class_num = 1
-        for i in current_sheet:
-            if i[0] != end_class_num:
-                end_class_num = end_class_num + 1
+        # get all class
+        end_class_num = get_total_class(current_sheet)
         print(end_class_num)
-        for i in range(end_class_num):
-            # print('current class %s' % (i + 1))
-            m = []
-            for j in current_sheet:
-                student_id = get_student_id(j)
-                print(j)
-                if j[0] == i + 1:
-                    add_student_id(j[2], m, student_id)
-                    add_student_id(j[3], m, student_id)
-                    add_student_id(j[4], m, student_id)
-            # print(m)
-            for line, j in enumerate(current_sheet):
-                if j[0] == i + 1:
-                    student_id = get_student_id(j)
-                    data.loc[line, '受欢迎提名'] = m.count(student_id)
-            # print("===================")
+        # count popular student num
+        count_popular_student_num(current_sheet, data, end_class_num)
         current_sheet = data.values.tolist()
-        # print("----------------------")
-        for i in range(end_class_num):
-            total_people = 0
-            total_sum = 0
-            for line, j in enumerate(current_sheet):
-                if j[0] == i + 1:
-                    total_people = total_people + 1
-                    total_sum = total_sum + j[5]
-            average = total_sum / total_people
-            # print(total_people, " ", total_sum, " ", average)
-            # 离差平方和
-            sum_of_squares_of_deviations = 0
-            for line, j in enumerate(current_sheet):
-                if j[0] == i + 1:
-                    sum_of_squares_of_deviations = sum_of_squares_of_deviations + pow(j[5] - average, 2)
-            # 方差
-            variance = sum_of_squares_of_deviations / total_people
-            # 标准差
-            standard_deviation = pow(variance, 0.5)
-            if standard_deviation == 0:
-                print('standard deviation can not be zero, current class is ' + str(i + 1))
-            total_protect_sum = 0
-            total_standard = 0
-            for line, j in enumerate(current_sheet):
-                if j[0] == i + 1:
-                    standard = (j[5] - average) / standard_deviation
-                    # print('Z', standard)
-                    data.loc[line, 'Z班内受欢迎'] = standard
-                    if float(standard) > 0:
-                        if float(standard) > 0:
-                            total_standard = total_standard + 1
-                        total_protect_sum = total_protect_sum + j[7]
-                    # data.loc[line, '受欢迎/保护'] = data.loc[line, '保护均分'] / standard
-            for line, j in enumerate(current_sheet):
-                if j[0] == i + 1:
-                    data.loc[line, '受欢迎/保护'] = total_protect_sum / total_standard
+        # calculate result
+        calculate_result(current_sheet, data, end_class_num)
+        # rewrite result
         data.to_excel(excel_writer=file_path, index=False)
     finally:
         input('Please input any key to quit!')
+
+
+def calculate_result(current_sheet, data, end_class_num):
+    for i in range(end_class_num):
+        total_people = 0
+        total_sum = 0
+        for j in current_sheet:
+            if j[0] == i + 1:
+                total_people = total_people + 1
+                total_sum = total_sum + j[5]
+        average = total_sum / total_people
+        # 离差平方和
+        sum_of_squares_of_deviations = 0
+        for j in current_sheet:
+            if j[0] == i + 1:
+                sum_of_squares_of_deviations = sum_of_squares_of_deviations + pow(j[5] - average, 2)
+        # 方差
+        variance = sum_of_squares_of_deviations / total_people
+        # 标准差
+        standard_deviation = pow(variance, 0.5)
+        if standard_deviation == 0:
+            print('standard deviation can not be zero, current class is ' + str(i + 1))
+            break
+        total_protect_sum = 0
+        total_standard = 0
+        for line, j in enumerate(current_sheet):
+            if j[0] == i + 1:
+                standard = (j[5] - average) / standard_deviation
+                data.loc[line, 'Z班内受欢迎'] = standard
+                if float(standard) > 0:
+                    if float(standard) > 0:
+                        total_standard = total_standard + 1
+                    total_protect_sum = total_protect_sum + j[7]
+        for line, j in enumerate(current_sheet):
+            if j[0] == i + 1:
+                data.loc[line, '受欢迎/保护'] = total_protect_sum / total_standard
+
+
+def count_popular_student_num(current_sheet, data, end_class_num):
+    for i in range(end_class_num):
+        m = []
+        for j in current_sheet:
+            student_id = get_student_id(j)
+            print(j)
+            if j[0] == i + 1:
+                add_student_id(j[2], m, student_id)
+                add_student_id(j[3], m, student_id)
+                add_student_id(j[4], m, student_id)
+        for line, j in enumerate(current_sheet):
+            if j[0] == i + 1:
+                data.loc[line, '受欢迎提名'] = m.count(get_student_id(j))
+
+
+def get_total_class(current_sheet):
+    end_class_num = 1
+    for i in current_sheet:
+        if i[0] != end_class_num:
+            end_class_num = end_class_num + 1
+    return end_class_num
 
 
 def get_student_id(current_line):
