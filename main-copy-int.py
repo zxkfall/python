@@ -104,7 +104,7 @@ if __name__ == '__main__':
     print("1. can trim space, Optimize algorithm logic")
     print("2. add error tips")
     filePath = input('Please input file Path:')
-    # filePath = 'popular.xlsx'
+    # filePath = 'popular2.xlsx'
     generate_excel(filePath)
 
 # 保护均分
