@@ -132,6 +132,5 @@ dmypy.json
 
 /*.xlsx
 /build
-=======
->>>>>>> a14f0ba (chore: add gitignore)
+
 .idea
