@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -131,4 +132,6 @@ dmypy.json
 
 /*.xlsx
 /build
+=======
+>>>>>>> a14f0ba (chore: add gitignore)
 .idea
