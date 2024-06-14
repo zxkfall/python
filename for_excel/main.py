@@ -98,3 +98,6 @@ for i in range(classId):
 data.to_excel(excel_writer='firstcase_copy.xlsx', index=False)
 
 # 保护均分
+
+#  pip install pyinstaller
+# Pyinstaller -F -w -i ddd.ico main.py

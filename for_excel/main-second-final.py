@@ -10,7 +10,6 @@ import pandas as pd
 if __name__ == '__main__':
     print("Designed by xingkun")
     print("Version: 1.0")
-try:
     file_path = input('Please input file path:')
     # data = pd.read_excel(path)
     # file_path = 'friend2.7(1).xlsx'
@@ -48,5 +47,3 @@ try:
             if j[0] == i + 1:
                 data.loc[line, '0/sum'] = sumHand / (totalPeople * (totalPeople - 1))
     data.to_excel(excel_writer=file_path, index=False, header=True)
-finally:
-    input('Finished, please press any key to quit!')

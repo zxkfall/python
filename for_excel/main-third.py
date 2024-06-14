@@ -9,7 +9,6 @@ import pandas as pd
 
 
 def generate_excel(file_path):
-    try:
         data = pd.read_excel(file_path)
         current_sheet = data.values.tolist()
         # get all class
@@ -19,8 +18,8 @@ def generate_excel(file_path):
         calculate_result(current_sheet, data, end_class_num)
         # rewrite result
         data.to_excel(excel_writer=file_path, index=False)
-    finally:
-        input('Please input any key to quit!')
+
+
 
 
 def calculate_result(current_sheet, data, end_class_num):
@@ -28,9 +27,15 @@ def calculate_result(current_sheet, data, end_class_num):
         total_people = 0
         total_sum = 0
         for j in current_sheet:
+            print(j, i)
             if j[0] == i + 1:
                 total_people = total_people + 1
-                total_sum = total_sum + j[2]
+                if pd.isna(j[2]):
+                    total_sum = total_sum + 0
+                else:
+                    total_sum = total_sum + j[2]
+        if total_people == 0:
+            break
         average = total_sum / total_people
         for line, j in enumerate(current_sheet):
             if j[0] == i + 1:

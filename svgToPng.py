@@ -15,5 +15,5 @@ for size in [16, 32, 64, 128, 256, 512, 1024]:
     img = Image.open(png_file)
     white_bg = Image.new('RGB', img.size, (255,255,255))
     white_bg.paste(img,mask=img.split()[3])
-    jpg = new_file = os.path.splitext(png_file)[0] + '.jpg'
+    jpg = new_file = os.path.splitext(png_file)[0] + '.png'
     white_bg.convert('RGB').save(new_file)
