@@ -25,7 +25,7 @@ def generate_excel(file_path):
 
 
 def calculate_result(current_sheet, data, end_class_num):
-    for i in range(end_class_num):
+    for i in range(int(current_sheet[0][0]) - 1,end_class_num):
         total_people = 0
         total_sum = 0
         for j in current_sheet:
@@ -66,7 +66,7 @@ def calculate_result(current_sheet, data, end_class_num):
 
 
 def count_popular_student_num(current_sheet, data, end_class_num):
-    for i in range(end_class_num):
+    for i in range(int(current_sheet[0][0]) - 1,end_class_num):
         m = []
         for j in current_sheet:
             student_id = get_student_id(j)
